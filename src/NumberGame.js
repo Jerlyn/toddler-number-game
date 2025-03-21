@@ -61,8 +61,17 @@ const NumberGame = () => {
       
       // Play correct sound
       if (correctSound.current) {
-        correctSound.current.currentTime = 0;
-        correctSound.current.play();
+        try {
+          correctSound.current.currentTime = 0;
+          const playPromise = correctSound.current.play();
+          if (playPromise !== undefined) {
+            playPromise.catch(error => {
+              console.log("Audio play error:", error);
+            });
+          }
+        } catch (error) {
+          console.log("Audio error:", error);
+        }
       }
       
       // Move to next round after delay
@@ -84,8 +93,16 @@ const NumberGame = () => {
   
   const handlePlayNumber = () => {
     if (numberSound.current) {
-      numberSound.current.currentTime = 0;
-      numberSound.current.play();
+      try {
+        const playPromise = numberSound.current.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(error => {
+            console.log("Audio play error:", error);
+          });
+        }
+      } catch (error) {
+        console.log("Audio error:", error);
+      }
     }
   };
   
@@ -243,14 +260,27 @@ const NumberGame = () => {
       <div className="max-w-md mx-auto bg-white rounded-xl shadow-lg p-6">
         {renderGameContent()}
         
-        {/* Hidden audio elements */}
-        <audio ref={correctSound} src="https://cdn.freesound.org/previews/521/521642_5304293-lq.mp3" preload="auto" aria-hidden="true" />
-        <audio ref={incorrectSound} src="https://cdn.freesound.org/previews/362/362204_6629250-lq.mp3" preload="auto" aria-hidden="true" />
+        {/* Hidden audio elements with error handling */}
         <audio 
-          ref={numberSound} 
-          src={`https://ssl.gstatic.com/dictionary/static/sounds/oxford/${currentNumber}--_us_1.mp3`} 
-          preload="auto" 
-          aria-hidden="true" 
+        ref={correctSound} 
+        src="https://cdn.freesound.org/previews/521/521642_5304293-lq.mp3" 
+        preload="auto" 
+        aria-hidden="true"
+        onError={(e) => console.log("Audio error:", e)}
+        />
+        <audio 
+        ref={incorrectSound} 
+        src="https://cdn.freesound.org/previews/362/362204_6629250-lq.mp3" 
+        preload="auto" 
+        aria-hidden="true" 
+        onError={(e) => console.log("Audio error:", e)}
+        />
+        <audio 
+        ref={numberSound} 
+        src={currentNumber ? `https://ssl.gstatic.com/dictionary/static/sounds/oxford/${currentNumber}--_us_1.mp3` : ''} 
+        preload="auto" 
+        aria-hidden="true"
+        onError={(e) => console.log("Audio error:", e)} 
         />
       </div>
     </div>
