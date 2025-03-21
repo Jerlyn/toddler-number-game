@@ -5,6 +5,16 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+// Handle GitHub Pages path issues
+if (process.env.NODE_ENV === 'production') {
+  // Remove trailing slash for consistency
+  const path = window.location.pathname.replace(/\/$/, '');
+  
+  // If we're on a "not found" page, redirect to the root
+  if (path.indexOf('/toddler-number-game') !== 0) {
+    window.location.href = '/toddler-number-game/';
+  }
+}
 root.render(
   <React.StrictMode>
     <App />
