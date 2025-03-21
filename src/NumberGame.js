@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { AlertCircle, ThumbsUp } from 'lucide-react';
+import { AlertCircle, ThumbsUp, Star, StarsIcon } from 'lucide-react';
 
 const NumberGame = () => {
   // Game states
@@ -11,6 +11,7 @@ const NumberGame = () => {
   const [feedback, setFeedback] = useState(null);
   const [showHint, setShowHint] = useState(false);
   const [animation, setAnimation] = useState('');
+  const [buttonAnimation, setButtonAnimation] = useState('');
   
   // Helper functions for creating game content
   const getNumberRange = () => {
@@ -66,10 +67,16 @@ const NumberGame = () => {
   };
   
   const startGame = (level) => {
-    setDifficulty(level);
-    setGameMode('play');
-    setScore(0);
-    startNewRound();
+    setButtonAnimation(level);
+    
+    // Short delay for button animation
+    setTimeout(() => {
+      setDifficulty(level);
+      setGameMode('play');
+      setScore(0);
+      startNewRound();
+      setButtonAnimation('');
+    }, 300);
   };
   
   // Setup game when difficulty changes
@@ -94,40 +101,141 @@ const NumberGame = () => {
     return dots;
   };
   
+  // Render simple illustrations based on difficulty level
+  const renderIllustration = (level) => {
+    switch(level) {
+      case 'easy':
+        return (
+          <div className="flex justify-center space-x-2 mb-2">
+            {[...Array(5)].map((_, i) => (
+              <div 
+                key={i} 
+                className="w-8 h-8 rounded-md bg-green-400 flex items-center justify-center text-white font-bold text-lg"
+                style={{
+                  transform: `rotate(${(i-2)*5}deg)`,
+                  boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+                }}
+              >
+                {i+1}
+              </div>
+            ))}
+          </div>
+        );
+      case 'medium':
+        return (
+          <div className="flex justify-center flex-wrap gap-2 mb-2 max-w-xs">
+            {[...Array(10)].map((_, i) => (
+              <div 
+                key={i} 
+                className="w-7 h-7 rounded-full bg-yellow-400 flex items-center justify-center text-white font-bold"
+                style={{
+                  boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+                }}
+              >
+                {i+1}
+              </div>
+            ))}
+          </div>
+        );
+      case 'hard':
+        return (
+          <div className="flex justify-center items-end space-x-1 mb-2 max-w-xs overflow-x-auto py-2">
+            {[...Array(20)].map((_, i) => (
+              <div 
+                key={i} 
+                className="w-4 h-10 rounded-t-lg bg-red-400 flex items-end justify-center pb-1 text-white font-bold text-xs"
+                style={{
+                  height: `${Math.max(20, 10 + i*2)}px`,
+                  boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+                }}
+              >
+                {i+1}
+              </div>
+            ))}
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
+  
   // Render different game screens based on game mode
   const renderGameContent = () => {
     switch (gameMode) {
       case 'menu':
         return (
           <div className="flex flex-col items-center space-y-6">
-            <h1 className="text-3xl md:text-4xl font-bold text-center text-purple-700">
+            {/* Character */}
+            <div className="relative w-40 h-40">
+              <div className="absolute w-36 h-36 bg-purple-300 rounded-full top-2 left-2"></div>
+              <div className="absolute w-36 h-36 bg-purple-500 rounded-full"></div>
+              <div className="absolute w-24 h-24 bg-white rounded-full top-6 left-6"></div>
+              <div className="absolute w-4 h-4 bg-black rounded-full top-16 left-14"></div>
+              <div className="absolute w-4 h-4 bg-black rounded-full top-16 left-22"></div>
+              <div className="absolute w-12 h-6 bg-black rounded-full top-24 left-12 overflow-hidden">
+                <div className="w-12 h-3 bg-red-500 rounded-full"></div>
+              </div>
+              <div className="absolute text-xl font-bold text-purple-700 top-44 left-6">
+                Number Buddy
+              </div>
+            </div>
+            
+            <h1 className="text-4xl md:text-5xl font-bold text-center text-purple-700" style={{fontFamily: 'Comic Sans MS, cursive'}}>
               Number Game
             </h1>
-            <p className="text-lg md:text-xl text-center">
-              Help your toddler learn numbers 1-20 with this fun game!
+            
+            <p className="text-xl md:text-2xl text-center text-purple-600 font-bold">
+              Let's count and learn numbers!
             </p>
-            <div className="flex flex-col space-y-4 w-full max-w-xs">
-              <button
-                onClick={() => startGame('easy')}
-                className="py-3 px-6 bg-green-500 hover:bg-green-600 text-white rounded-lg text-xl font-bold focus:outline-none focus:ring-4 focus:ring-green-300 transition-colors"
-                aria-label="Start easy game with numbers 1 to 5"
-              >
-                Easy (1-5)
-              </button>
-              <button
-                onClick={() => startGame('medium')}
-                className="py-3 px-6 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg text-xl font-bold focus:outline-none focus:ring-4 focus:ring-yellow-300 transition-colors"
-                aria-label="Start medium game with numbers 1 to 10"
-              >
-                Medium (1-10)
-              </button>
-              <button
-                onClick={() => startGame('hard')}
-                className="py-3 px-6 bg-red-500 hover:bg-red-600 text-white rounded-lg text-xl font-bold focus:outline-none focus:ring-4 focus:ring-red-300 transition-colors"
-                aria-label="Start hard game with numbers 1 to 20"
-              >
-                Hard (1-20)
-              </button>
+            
+            <div className="flex flex-col space-y-8 w-full max-w-xs">
+              <div className={`transform transition-all duration-300 ${buttonAnimation === 'easy' ? 'scale-95' : 'scale-100'}`}>
+                {renderIllustration('easy')}
+                <button
+                  onClick={() => startGame('easy')}
+                  className="w-full py-5 px-6 bg-gradient-to-r from-green-400 to-green-600 text-white rounded-2xl text-2xl font-bold focus:outline-none focus:ring-4 focus:ring-green-300 transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                  aria-label="Start easy game with numbers 1 to 5"
+                  style={{fontFamily: 'Comic Sans MS, cursive'}}
+                >
+                  <div className="flex items-center justify-center">
+                    <Star className="w-8 h-8 mr-2" fill="white" />
+                    Easy (1-5)
+                  </div>
+                </button>
+              </div>
+              
+              <div className={`transform transition-all duration-300 ${buttonAnimation === 'medium' ? 'scale-95' : 'scale-100'}`}>
+                {renderIllustration('medium')}
+                <button
+                  onClick={() => startGame('medium')}
+                  className="w-full py-5 px-6 bg-gradient-to-r from-yellow-400 to-yellow-600 text-white rounded-2xl text-2xl font-bold focus:outline-none focus:ring-4 focus:ring-yellow-300 transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                  aria-label="Start medium game with numbers 1 to 10"
+                  style={{fontFamily: 'Comic Sans MS, cursive'}}
+                >
+                  <div className="flex items-center justify-center">
+                    <StarsIcon className="w-8 h-8 mr-2" fill="white" />
+                    Medium (1-10)
+                  </div>
+                </button>
+              </div>
+              
+              <div className={`transform transition-all duration-300 ${buttonAnimation === 'hard' ? 'scale-95' : 'scale-100'}`}>
+                {renderIllustration('hard')}
+                <button
+                  onClick={() => startGame('hard')}
+                  className="w-full py-5 px-6 bg-gradient-to-r from-red-400 to-red-600 text-white rounded-2xl text-2xl font-bold focus:outline-none focus:ring-4 focus:ring-red-300 transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                  aria-label="Start hard game with numbers 1 to 20"
+                  style={{fontFamily: 'Comic Sans MS, cursive'}}
+                >
+                  <div className="flex items-center justify-center">
+                    <svg className="w-8 h-8 mr-2" viewBox="0 0 24 24" fill="white">
+                      <path d="M12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2Z" />
+                      <path d="M12 4L10.38 8.79L6 9.18L9.2 12.24L8.16 17L12 14.54V4Z" fill="rgba(0,0,0,0.2)" />
+                    </svg>
+                    Hard (1-20)
+                  </div>
+                </button>
+              </div>
             </div>
           </div>
         );
@@ -138,19 +246,27 @@ const NumberGame = () => {
             <div className="flex justify-between items-center w-full">
               <button
                 onClick={() => setGameMode('menu')}
-                className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400"
+                className="px-4 py-2 bg-gradient-to-r from-purple-400 to-purple-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 font-bold"
                 aria-label="Back to menu"
+                style={{fontFamily: 'Comic Sans MS, cursive'}}
               >
                 Back
               </button>
-              <div className="text-lg font-bold">
+              <div className="text-xl font-bold text-purple-700" style={{fontFamily: 'Comic Sans MS, cursive'}}>
                 Score: {score}
               </div>
             </div>
             
             <div className="text-center">
-              <h2 className="text-lg font-medium text-gray-700 mb-2">Find this number:</h2>
-              <div className={`text-8xl font-bold ${animation === 'celebrate' ? 'animate-bounce' : ''}`} aria-live="polite">
+              <h2 className="text-xl font-bold text-purple-600 mb-2" style={{fontFamily: 'Comic Sans MS, cursive'}}>Find this number:</h2>
+              <div 
+                className={`text-9xl font-bold text-purple-700 ${animation === 'celebrate' ? 'animate-bounce' : ''}`} 
+                aria-live="polite"
+                style={{
+                  fontFamily: 'Comic Sans MS, cursive',
+                  textShadow: '2px 2px 4px rgba(0,0,0,0.2)'
+                }}
+              >
                 {currentNumber}
               </div>
             </div>
@@ -161,20 +277,22 @@ const NumberGame = () => {
               </div>
             )}
             
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-6">
               {options.map((number) => (
                 <button
                   key={number}
                   onClick={() => handleOptionClick(number)}
                   className={`
-                    w-20 h-20 md:w-24 md:h-24 text-4xl md:text-5xl font-bold rounded-xl 
+                    w-24 h-24 md:w-28 md:h-28 text-5xl md:text-6xl font-bold rounded-2xl 
                     focus:outline-none focus:ring-4 focus:ring-blue-300
-                    ${feedback === 'correct' && number === currentNumber ? 'bg-green-500 text-white' : ''}
-                    ${feedback === 'incorrect' && number === currentNumber ? 'bg-yellow-200' : ''}
-                    ${!feedback || (feedback === 'incorrect' && number !== currentNumber) ? 'bg-white border-2 border-gray-300 hover:bg-gray-100' : ''}
+                    shadow-lg transform transition-all duration-200 hover:scale-105
+                    ${feedback === 'correct' && number === currentNumber ? 'bg-gradient-to-r from-green-400 to-green-600 text-white' : ''}
+                    ${feedback === 'incorrect' && number === currentNumber ? 'bg-yellow-200 border-2 border-yellow-400' : ''}
+                    ${!feedback || (feedback === 'incorrect' && number !== currentNumber) ? 'bg-white border-4 border-gray-300 hover:border-blue-400' : ''}
                   `}
                   disabled={feedback === 'correct'}
                   aria-label={`${number}`}
+                  style={{fontFamily: 'Comic Sans MS, cursive'}}
                 >
                   {number}
                 </button>
@@ -183,17 +301,18 @@ const NumberGame = () => {
             
             {feedback && (
               <div 
-                className={`flex items-center space-x-2 text-lg font-bold ${feedback === 'correct' ? 'text-green-600' : 'text-red-600'}`}
+                className={`flex items-center space-x-2 text-2xl font-bold ${feedback === 'correct' ? 'text-green-600' : 'text-red-600'}`}
                 aria-live="assertive"
+                style={{fontFamily: 'Comic Sans MS, cursive'}}
               >
                 {feedback === 'correct' ? (
                   <>
-                    <ThumbsUp size={24} />
+                    <ThumbsUp size={28} />
                     <span>Great job!</span>
                   </>
                 ) : (
                   <>
-                    <AlertCircle size={24} />
+                    <AlertCircle size={28} />
                     <span>Try again!</span>
                   </>
                 )}
@@ -208,8 +327,8 @@ const NumberGame = () => {
   };
   
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-purple-100 p-4">
-      <div className="max-w-md mx-auto bg-white rounded-xl shadow-lg p-6">
+    <div className="min-h-screen bg-gradient-to-b from-blue-200 to-purple-200 p-4">
+      <div className="max-w-md mx-auto bg-white rounded-3xl shadow-2xl p-6">
         {renderGameContent()}
       </div>
     </div>
