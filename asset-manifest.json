@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/toddler-number-game/static/css/main.92c8d4eb.css",
-    "main.js": "/toddler-number-game/static/js/main.55491c23.js",
+    "main.css": "/toddler-number-game/static/css/main.ddec6049.css",
+    "main.js": "/toddler-number-game/static/js/main.ea7ead5e.js",
     "static/js/453.4297a464.chunk.js": "/toddler-number-game/static/js/453.4297a464.chunk.js",
     "index.html": "/toddler-number-game/index.html",
-    "main.92c8d4eb.css.map": "/toddler-number-game/static/css/main.92c8d4eb.css.map",
-    "main.55491c23.js.map": "/toddler-number-game/static/js/main.55491c23.js.map",
+    "main.ddec6049.css.map": "/toddler-number-game/static/css/main.ddec6049.css.map",
+    "main.ea7ead5e.js.map": "/toddler-number-game/static/js/main.ea7ead5e.js.map",
     "453.4297a464.chunk.js.map": "/toddler-number-game/static/js/453.4297a464.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.92c8d4eb.css",
-    "static/js/main.55491c23.js"
+    "static/css/main.ddec6049.css",
+    "static/js/main.ea7ead5e.js"
   ]
 }
