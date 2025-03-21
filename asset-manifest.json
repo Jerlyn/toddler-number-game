@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/toddler-number-game/static/css/main.92c8d4eb.css",
+    "main.js": "/toddler-number-game/static/js/main.55491c23.js",
+    "static/js/453.4297a464.chunk.js": "/toddler-number-game/static/js/453.4297a464.chunk.js",
+    "index.html": "/toddler-number-game/index.html",
+    "main.92c8d4eb.css.map": "/toddler-number-game/static/css/main.92c8d4eb.css.map",
+    "main.55491c23.js.map": "/toddler-number-game/static/js/main.55491c23.js.map",
+    "453.4297a464.chunk.js.map": "/toddler-number-game/static/js/453.4297a464.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.92c8d4eb.css",
+    "static/js/main.55491c23.js"
+  ]
+}
