@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { AlertCircle, ThumbsUp, Volume2 } from 'lucide-react';
+import { AlertCircle, ThumbsUp, Volume2, VolumeX } from 'lucide-react';
 
 const NumberGame = () => {
   // Game states
@@ -11,6 +11,7 @@ const NumberGame = () => {
   const [feedback, setFeedback] = useState(null);
   const [showHint, setShowHint] = useState(false);
   const [animation, setAnimation] = useState('');
+  const [audioEnabled, setAudioEnabled] = useState(false);
   
   // Audio elements
   const correctSound = useRef(null);
@@ -42,6 +43,26 @@ const NumberGame = () => {
     return options.sort(() => Math.random() - 0.5);
   };
   
+  // Safe audio playing function
+  const safelyPlayAudio = (audioRef) => {
+    if (!audioEnabled || !audioRef.current) return;
+    
+    try {
+      // Reset audio position if it was already playing
+      audioRef.current.currentTime = 0;
+      
+      // Play with error handling
+      const playPromise = audioRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          // Silently fail - don't disrupt the game
+        });
+      }
+    } catch (e) {
+      // Silently fail
+    }
+  };
+  
   const startNewRound = () => {
     const { min, max } = getNumberRange();
     const newNumber = Math.floor(Math.random() * (max - min + 1)) + min;
@@ -60,19 +81,7 @@ const NumberGame = () => {
       setAnimation('celebrate');
       
       // Play correct sound
-      if (correctSound.current) {
-        try {
-          correctSound.current.currentTime = 0;
-          const playPromise = correctSound.current.play();
-          if (playPromise !== undefined) {
-            playPromise.catch(error => {
-              console.log("Audio play error:", error);
-            });
-          }
-        } catch (error) {
-          console.log("Audio error:", error);
-        }
-      }
+      safelyPlayAudio(correctSound);
       
       // Move to next round after delay
       setTimeout(() => {
@@ -84,26 +93,12 @@ const NumberGame = () => {
       setShowHint(true);
       
       // Play incorrect sound
-      if (incorrectSound.current) {
-        incorrectSound.current.currentTime = 0;
-        incorrectSound.current.play();
-      }
+      safelyPlayAudio(incorrectSound);
     }
   };
   
   const handlePlayNumber = () => {
-    if (numberSound.current) {
-      try {
-        const playPromise = numberSound.current.play();
-        if (playPromise !== undefined) {
-          playPromise.catch(error => {
-            console.log("Audio play error:", error);
-          });
-        }
-      } catch (error) {
-        console.log("Audio error:", error);
-      }
-    }
+    safelyPlayAudio(numberSound);
   };
   
   const startGame = (level) => {
@@ -170,6 +165,16 @@ const NumberGame = () => {
                 Hard (1-20)
               </button>
             </div>
+            
+            <button
+              onClick={() => setAudioEnabled(!audioEnabled)}
+              className="mt-4 flex items-center gap-2 px-4 py-2 text-sm bg-purple-100 hover:bg-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-300"
+            >
+              {audioEnabled ? 
+                <><Volume2 size={18} /> Sound On</> : 
+                <><VolumeX size={18} /> Sound Off</>
+              }
+            </button>
           </div>
         );
         
@@ -194,13 +199,15 @@ const NumberGame = () => {
               <div className={`text-8xl font-bold ${animation === 'celebrate' ? 'animate-bounce' : ''}`} aria-live="polite">
                 {currentNumber}
               </div>
-              <button 
-                onClick={handlePlayNumber}
-                className="mt-2 flex items-center justify-center p-2 bg-purple-100 hover:bg-purple-200 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-300"
-                aria-label={`Hear the number ${currentNumber}`}
-              >
-                <Volume2 className="text-purple-700" size={24} />
-              </button>
+              {audioEnabled && (
+                <button 
+                  onClick={handlePlayNumber}
+                  className="mt-2 flex items-center justify-center p-2 bg-purple-100 hover:bg-purple-200 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-300"
+                  aria-label={`Hear the number ${currentNumber}`}
+                >
+                  <Volume2 className="text-purple-700" size={24} />
+                </button>
+              )}
             </div>
             
             {showHint && (
@@ -261,27 +268,28 @@ const NumberGame = () => {
         {renderGameContent()}
         
         {/* Hidden audio elements with error handling */}
-        <audio 
-        ref={correctSound} 
-        src="https://cdn.freesound.org/previews/521/521642_5304293-lq.mp3" 
-        preload="auto" 
-        aria-hidden="true"
-        onError={(e) => console.log("Audio error:", e)}
-        />
-        <audio 
-        ref={incorrectSound} 
-        src="https://cdn.freesound.org/previews/362/362204_6629250-lq.mp3" 
-        preload="auto" 
-        aria-hidden="true" 
-        onError={(e) => console.log("Audio error:", e)}
-        />
-        <audio 
-        ref={numberSound} 
-        src={currentNumber ? `https://ssl.gstatic.com/dictionary/static/sounds/oxford/${currentNumber}--_us_1.mp3` : ''} 
-        preload="auto" 
-        aria-hidden="true"
-        onError={(e) => console.log("Audio error:", e)} 
-        />
+        {audioEnabled && (
+          <>
+            <audio 
+              ref={correctSound} 
+              src="https://cdn.freesound.org/previews/521/521642_5304293-lq.mp3" 
+              preload="auto" 
+              aria-hidden="true"
+            />
+            <audio 
+              ref={incorrectSound} 
+              src="https://cdn.freesound.org/previews/362/362204_6629250-lq.mp3" 
+              preload="auto" 
+              aria-hidden="true" 
+            />
+            <audio 
+              ref={numberSound} 
+              src={currentNumber ? `https://ssl.gstatic.com/dictionary/static/sounds/oxford/${currentNumber}--_us_1.mp3` : ''} 
+              preload="auto" 
+              aria-hidden="true"
+            />
+          </>
+        )}
       </div>
     </div>
   );
