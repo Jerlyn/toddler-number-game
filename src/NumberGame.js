@@ -164,9 +164,9 @@ const NumberGame = () => {
     switch (gameMode) {
       case 'menu':
         return (
-          <div className="flex flex-col items-center space-y-6">
+          <div className="flex flex-col items-center space-y-8">
             {/* Character */}
-            <div className="relative w-40 h-40">
+            <div className="relative w-40 h-40 mb-12">
               <div className="absolute w-36 h-36 bg-purple-300 rounded-full top-2 left-2"></div>
               <div className="absolute w-36 h-36 bg-purple-500 rounded-full"></div>
               <div className="absolute w-24 h-24 bg-white rounded-full top-6 left-6"></div>
@@ -174,9 +174,6 @@ const NumberGame = () => {
               <div className="absolute w-4 h-4 bg-black rounded-full top-16 left-22"></div>
               <div className="absolute w-12 h-6 bg-black rounded-full top-24 left-12 overflow-hidden">
                 <div className="w-12 h-3 bg-red-500 rounded-full"></div>
-              </div>
-              <div className="absolute text-xl font-bold text-purple-700 top-44 left-6">
-                Number Buddy
               </div>
             </div>
             
@@ -240,7 +237,154 @@ const NumberGame = () => {
           </div>
         );
         
-      case 'play':
+     // In the renderGameContent function, update the 'play' case:
+
+case 'play':
+    return (
+      <div className="flex flex-col items-center space-y-6">
+        {/* Header with score and back button */}
+        <div className="flex justify-between items-center w-full">
+          <button
+            onClick={() => setGameMode('menu')}
+            className="px-5 py-3 bg-gradient-to-r from-purple-400 to-purple-600 text-white rounded-full focus:outline-none focus:ring-4 focus:ring-purple-300 font-bold shadow-lg transform hover:scale-105 transition-all"
+            aria-label="Back to menu"
+            style={{fontFamily: 'Comic Sans MS, cursive'}}
+          >
+            <span className="flex items-center">
+              ← Back
+            </span>
+          </button>
+          <div className="px-4 py-2 bg-gradient-to-r from-indigo-400 to-indigo-600 text-white rounded-full shadow-md text-xl font-bold" style={{fontFamily: 'Comic Sans MS, cursive'}}>
+            Score: {score}
+          </div>
+        </div>
+        
+        {/* Character */}
+        <div className="absolute top-14 left-6 w-20 h-20">
+          <div className="relative">
+            <div className="absolute w-18 h-18 bg-purple-300 rounded-full top-1 left-1"></div>
+            <div className="absolute w-18 h-18 bg-purple-500 rounded-full"></div>
+            <div className="absolute w-12 h-12 bg-white rounded-full top-3 left-3"></div>
+            <div className="absolute w-2 h-2 bg-black rounded-full top-8 left-7"></div>
+            <div className="absolute w-2 h-2 bg-black rounded-full top-8 left-11"></div>
+            <div className="absolute w-6 h-3 bg-black rounded-full top-12 left-6 overflow-hidden">
+              <div className="w-6 h-1.5 bg-red-500 rounded-full"></div>
+            </div>
+          </div>
+        </div>
+        
+        {/* Target number section */}
+        <div className="text-center mt-4">
+          <h2 className="text-2xl font-bold text-purple-600 mb-2" style={{fontFamily: 'Comic Sans MS, cursive'}}>
+            Find this number:
+          </h2>
+          <div 
+            className={`text-9xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-pink-500 
+              ${animation === 'celebrate' ? 'animate-bounce' : 'animate-pulse'}`} 
+            aria-live="polite"
+            style={{
+              fontFamily: 'Comic Sans MS, cursive',
+              textShadow: '4px 4px 8px rgba(147, 51, 234, 0.3)'
+            }}
+          >
+            {currentNumber}
+          </div>
+        </div>
+        
+        {/* Dots hint */}
+        {showHint && (
+          <div className="flex flex-wrap justify-center gap-3 max-w-xs" aria-label={`${currentNumber} dots`}>
+            {[...Array(currentNumber)].map((_, i) => (
+              <div 
+                key={i} 
+                className="w-6 h-6 md:w-8 md:h-8 rounded-full transition-all animate-bounce"
+                style={{
+                  backgroundColor: `hsl(${(i * 25) % 360}, 80%, 60%)`,
+                  boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
+                  animationDelay: `${i * 0.1}s`
+                }}
+                aria-hidden="true"
+              />
+            ))}
+          </div>
+        )}
+        
+        {/* Number options */}
+        <div className="grid grid-cols-2 gap-6 mt-4">
+          {options.map((number, index) => {
+            // Different colors for each button
+            const colors = [
+              'from-green-400 to-green-600',
+              'from-blue-400 to-blue-600',
+              'from-yellow-400 to-yellow-600',
+              'from-red-400 to-red-600'
+            ];
+            
+            return (
+              <button
+                key={number}
+                onClick={() => handleOptionClick(number)}
+                className={`
+                  w-28 h-28 md:w-32 md:h-32 text-6xl font-bold rounded-2xl 
+                  focus:outline-none focus:ring-4 focus:ring-blue-300
+                  shadow-xl transform transition-all duration-200 hover:scale-105
+                  ${feedback === 'correct' && number === currentNumber ? 
+                    'bg-gradient-to-r from-green-400 to-green-600 text-white animate-bounce' : 
+                    feedback === 'incorrect' && number === currentNumber ? 
+                    'bg-yellow-200 border-4 border-yellow-400 animate-pulse' : 
+                    `bg-gradient-to-r ${colors[index]} text-white`}
+                `}
+                disabled={feedback === 'correct'}
+                aria-label={`${number}`}
+                style={{fontFamily: 'Comic Sans MS, cursive'}}
+              >
+                {number}
+              </button>
+            );
+          })}
+        </div>
+        
+        {/* Feedback section */}
+        {feedback && (
+          <div 
+            className={`flex items-center space-x-3 text-2xl font-bold p-4 rounded-xl ${
+              feedback === 'correct' ? 
+              'bg-green-100 text-green-600 animate-pulse' : 
+              'bg-yellow-100 text-orange-600'
+            }`}
+            aria-live="assertive"
+            style={{fontFamily: 'Comic Sans MS, cursive'}}
+          >
+            {feedback === 'correct' ? (
+              <>
+                <ThumbsUp size={32} className="text-green-500" />
+                <span>Great job!</span>
+                <div className="absolute inset-0 pointer-events-none">
+                  {[...Array(20)].map((_, i) => (
+                    <div
+                      key={i}
+                      className="absolute w-3 h-3 rounded-full"
+                      style={{
+                        backgroundColor: `hsl(${Math.random() * 360}, 80%, 60%)`,
+                        top: `${Math.random() * 100}%`,
+                        left: `${Math.random() * 100}%`,
+                        animation: `fall ${1 + Math.random() * 3}s linear forwards`,
+                        animationDelay: `${Math.random() * 2}s`,
+                      }}
+                    />
+                  ))}
+                </div>
+              </>
+            ) : (
+              <>
+                <AlertCircle size={32} className="text-orange-500" />
+                <span>Try again!</span>
+              </>
+            )}
+          </div>
+        )}
+      </div>
+    );
         return (
           <div className="flex flex-col items-center space-y-6">
             <div className="flex justify-between items-center w-full">
