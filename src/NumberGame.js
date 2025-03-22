@@ -177,7 +177,7 @@ const NumberGame = () => {
               </div>
             </div>
             
-            <h1 className="text-4xl md:text-5xl font-bold text-center text-purple-700" style={{fontFamily: 'Fredoka One, cursive'}}>
+            <h1 className="text-4xl md:text-5xl font-bold text-center text-purple-700" style={{fontFamily: 'Fredoka One, Arial'}}>
               Number Game
             </h1>
             
@@ -192,7 +192,7 @@ const NumberGame = () => {
                   onClick={() => startGame('easy')}
                   className="w-full py-5 px-6 bg-gradient-to-r from-green-400 to-green-600 text-white rounded-2xl text-2xl font-bold focus:outline-none focus:ring-4 focus:ring-green-300 transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-1"
                   aria-label="Start easy game with numbers 1 to 5"
-                  style={{fontFamily: 'Fredoka One, cursive'}}
+                  style={{fontFamily: 'Fredoka One, Arial'}}
                 >
                   <div className="flex items-center justify-center">
                     <Star className="w-8 h-8 mr-2" fill="white" />
@@ -207,7 +207,7 @@ const NumberGame = () => {
                   onClick={() => startGame('medium')}
                   className="w-full py-5 px-6 bg-gradient-to-r from-yellow-400 to-yellow-600 text-white rounded-2xl text-2xl font-bold focus:outline-none focus:ring-4 focus:ring-yellow-300 transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-1"
                   aria-label="Start medium game with numbers 1 to 10"
-                  style={{fontFamily: 'Fredoka One, cursive'}}
+                  style={{fontFamily: 'Fredoka One, Arial'}}
                 >
                   <div className="flex items-center justify-center">
                     <StarsIcon className="w-8 h-8 mr-2" fill="white" />
@@ -222,7 +222,7 @@ const NumberGame = () => {
                   onClick={() => startGame('hard')}
                   className="w-full py-5 px-6 bg-gradient-to-r from-red-400 to-red-600 text-white rounded-2xl text-2xl font-bold focus:outline-none focus:ring-4 focus:ring-red-300 transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-1"
                   aria-label="Start hard game with numbers 1 to 20"
-                  style={{fontFamily: 'Fredoka One, cursive'}}
+                  style={{fontFamily: 'Fredoka One, Arial'}}
                 >
                   <div className="flex items-center justify-center">
                     <svg className="w-8 h-8 mr-2" viewBox="0 0 24 24" fill="white">
@@ -248,13 +248,13 @@ case 'play':
             onClick={() => setGameMode('menu')}
             className="px-5 py-3 bg-gradient-to-r from-purple-400 to-purple-600 text-white rounded-full focus:outline-none focus:ring-4 focus:ring-purple-300 font-bold shadow-lg transform hover:scale-105 transition-all"
             aria-label="Back to menu"
-            style={{fontFamily: 'Fredoka One, cursive'}}
+            style={{fontFamily: 'Fredoka One, Arial'}}
           >
             <span className="flex items-center">
               ← Back
             </span>
           </button>
-          <div className="px-4 py-2 bg-gradient-to-r from-indigo-400 to-indigo-600 text-white rounded-full shadow-md text-xl font-bold" style={{fontFamily: 'Fredoka One, cursive'}}>
+          <div className="px-4 py-2 bg-gradient-to-r from-indigo-400 to-indigo-600 text-white rounded-full shadow-md text-xl font-bold" style={{fontFamily: 'Fredoka One, Arial'}}>
             Score: {score}
           </div>
         </div>
@@ -275,7 +275,7 @@ case 'play':
         
         {/* Target number section */}
         <div className="text-center mt-4">
-          <h2 className="text-2xl font-bold text-purple-600 mb-2" style={{fontFamily: 'Fredoka One, cursive'}}>
+          <h2 className="text-2xl font-bold text-purple-600 mb-2" style={{fontFamily: 'Fredoka One, Arial'}}>
             Find this number:
           </h2>
           <div 
@@ -283,7 +283,7 @@ case 'play':
               ${animation === 'celebrate' ? 'animate-bounce' : 'animate-pulse'}`} 
             aria-live="polite"
             style={{
-              fontFamily: 'Fredoka One, cursive',
+              fontFamily: 'Fredoka One, Arial',
               textShadow: '4px 4px 8px rgba(147, 51, 234, 0.3)'
             }}
           >
@@ -336,7 +336,7 @@ case 'play':
                 `}
                 disabled={feedback === 'correct'}
                 aria-label={`${number}`}
-                style={{fontFamily: 'Fredoka One, cursive'}}
+                style={{fontFamily: 'Fredoka One, Arial'}}
               >
                 {number}
               </button>
@@ -353,7 +353,7 @@ case 'play':
               'bg-yellow-100 text-orange-600'
             }`}
             aria-live="assertive"
-            style={{fontFamily: 'Fredoka One, cursive'}}
+            style={{fontFamily: 'Fredoka One, Arial'}}
           >
             {feedback === 'correct' ? (
               <>
@@ -392,22 +392,22 @@ case 'play':
                 onClick={() => setGameMode('menu')}
                 className="px-4 py-2 bg-gradient-to-r from-purple-400 to-purple-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 font-bold"
                 aria-label="Back to menu"
-                style={{fontFamily: 'Fredoka One, cursive'}}
+                style={{fontFamily: 'Fredoka One, Arial'}}
               >
                 Back
               </button>
-              <div className="text-xl font-bold text-purple-700" style={{fontFamily: 'Fredoka One, cursive'}}>
+              <div className="text-xl font-bold text-purple-700" style={{fontFamily: 'Fredoka One, Arial'}}>
                 Score: {score}
               </div>
             </div>
             
             <div className="text-center">
-              <h2 className="text-xl font-bold text-purple-600 mb-2" style={{fontFamily: 'Fredoka One, cursive'}}>Find this number:</h2>
+              <h2 className="text-xl font-bold text-purple-600 mb-2" style={{fontFamily: 'Fredoka One, Arial'}}>Find this number:</h2>
               <div 
                 className={`text-9xl font-bold text-purple-700 ${animation === 'celebrate' ? 'animate-bounce' : ''}`} 
                 aria-live="polite"
                 style={{
-                  fontFamily: 'Fredoka One, cursive',
+                  fontFamily: 'Fredoka One, Arial',
                   textShadow: '2px 2px 4px rgba(0,0,0,0.2)'
                 }}
               >
@@ -436,7 +436,7 @@ case 'play':
                   `}
                   disabled={feedback === 'correct'}
                   aria-label={`${number}`}
-                  style={{fontFamily: 'Fredoka One, cursive'}}
+                  style={{fontFamily: 'Fredoka One, Arial'}}
                 >
                   {number}
                 </button>
@@ -447,7 +447,7 @@ case 'play':
               <div 
                 className={`flex items-center space-x-2 text-2xl font-bold ${feedback === 'correct' ? 'text-green-600' : 'text-red-600'}`}
                 aria-live="assertive"
-                style={{fontFamily: 'Fredoka One, cursive'}}
+                style={{fontFamily: 'Fredoka One, Arial'}}
               >
                 {feedback === 'correct' ? (
                   <>
